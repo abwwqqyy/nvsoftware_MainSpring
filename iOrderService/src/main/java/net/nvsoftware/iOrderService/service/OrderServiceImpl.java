@@ -5,6 +5,7 @@ import net.nvsoftware.iOrderService.entity.OrderEntity;
 import net.nvsoftware.iOrderService.external.client.PaymentServiceFeignClient;
 import net.nvsoftware.iOrderService.external.client.ProductServiceFeignClient;
 import net.nvsoftware.iOrderService.model.OrderRequest;
+import net.nvsoftware.iOrderService.model.OrderResponse;
 import net.nvsoftware.iOrderService.model.PaymentRequest;
 import net.nvsoftware.iOrderService.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +66,21 @@ public class OrderServiceImpl implements OrderService{
         orderRepository.save(orderEntity);
         log.info("PaymentServiceFeignClient doPayment done.");
         return orderEntity.getOrderId();
+    }
+
+    @Override
+    public OrderResponse getOrderDetailByOrderId(long orderId) {
+        log.info("OrderService getOrderDetailByOrderId start with orderId: " + orderId);
+        OrderEntity orderEntity = orderRepository.findById(orderId)
+                        .orElseThrow(() -> new RuntimeException("OrderService getOrderDetailByOrderId NOT FOUND for: " + orderId));
+        OrderResponse orderResponse = OrderResponse.builder()
+                .orderId(orderEntity.getOrderId())
+                .totalAmount(orderEntity.getTotalAmount())
+                .orderDate(orderEntity.getOrderDate())
+                .orderStatus(orderEntity.getOrderStatus())
+                .build();
+
+        log.info("OrderService getOrderDetailByOrderId done with orderId: " + orderId);
+        return orderResponse;
     }
 }
