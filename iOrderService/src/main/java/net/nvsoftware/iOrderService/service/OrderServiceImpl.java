@@ -10,6 +10,7 @@ import net.nvsoftware.iOrderService.model.PaymentRequest;
 import net.nvsoftware.iOrderService.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 
@@ -24,6 +25,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private PaymentServiceFeignClient paymentServiceFeignClient;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     @Override
     public long placeOrder(OrderRequest orderRequest) { // TODO: make this a transaction
@@ -73,12 +77,22 @@ public class OrderServiceImpl implements OrderService{
         log.info("OrderService getOrderDetailByOrderId start with orderId: " + orderId);
         OrderEntity orderEntity = orderRepository.findById(orderId)
                         .orElseThrow(() -> new RuntimeException("OrderService getOrderDetailByOrderId NOT FOUND for: " + orderId));
+
+        log.info("OrderService RestCall ProductService getByProductId: " + orderEntity.getProductId());
+        OrderResponse.ProductResponse productResponse = restTemplate.getForObject(
+                "http://PRODUCT-SERVICE/products/" + orderEntity.getProductId(),
+                OrderResponse.ProductResponse.class
+        );
+
         OrderResponse orderResponse = OrderResponse.builder()
                 .orderId(orderEntity.getOrderId())
                 .totalAmount(orderEntity.getTotalAmount())
                 .orderDate(orderEntity.getOrderDate())
                 .orderStatus(orderEntity.getOrderStatus())
+                .productResponse(productResponse)
                 .build();
+
+
 
         log.info("OrderService getOrderDetailByOrderId done with orderId: " + orderId);
         return orderResponse;
