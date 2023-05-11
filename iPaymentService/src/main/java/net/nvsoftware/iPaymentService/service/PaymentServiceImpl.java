@@ -2,7 +2,9 @@ package net.nvsoftware.iPaymentService.service;
 
 import lombok.extern.log4j.Log4j2;
 import net.nvsoftware.iPaymentService.entity.PaymentEntity;
+import net.nvsoftware.iPaymentService.model.PaymentMode;
 import net.nvsoftware.iPaymentService.model.PaymentRequest;
+import net.nvsoftware.iPaymentService.model.PaymentResponse;
 import net.nvsoftware.iPaymentService.repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,5 +30,21 @@ public class PaymentServiceImpl implements PaymentService{
         paymentRepository.save(paymentEntity);
         log.info("PaymentService doPayment done with paymentID: " + paymentEntity.getPaymentId());
         return paymentEntity.getPaymentId();
+    }
+
+    @Override
+    public PaymentResponse getPaymentByOrderId(long orderId) {
+        log.info("PaymentService getPaymentByOrderId start with orderId: " + orderId);
+        PaymentEntity paymentEntity = paymentRepository.findByOrderId(orderId);
+        PaymentResponse paymentResponse = PaymentResponse.builder()
+                .paymentId(paymentEntity.getPaymentId())
+                .orderId(paymentEntity.getOrderId())
+                .totalAmount(paymentEntity.getTotalAmount())
+                .paymentMode(PaymentMode.valueOf(paymentEntity.getPaymentMode()))
+                .paymentDate(paymentEntity.getPaymentDate())
+                .paymentStatus(paymentEntity.getPaymentStatus())
+                .build();
+        log.info("PaymentService getPaymentByOrderId done with orderId: " + orderId);
+        return paymentResponse;
     }
 }
