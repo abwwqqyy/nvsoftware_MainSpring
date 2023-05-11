@@ -40,4 +40,19 @@ public class ProductServiceImpl implements ProductService{
         log.info("ProductService getProductById done with productId: " + productId);
         return productResponse;
     }
+
+    @Override
+    public void reduceQuantity(long productId, long quantity) {
+        log.info("ProductService reduceQuantity: " + quantity + " for product: " + productId + " start.");
+        ProductEntity productEntity = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("ProductService reduceQuantity produceId not found."));
+
+        if (productEntity.getProductQuantity() < quantity){
+            throw new RuntimeException("ProductService reduceQuantity too big.");
+        }
+
+        productEntity.setProductQuantity(productEntity.getProductQuantity() - quantity);
+        productRepository.save(productEntity);
+        log.info("ProductService reduceQuantity: " + quantity + " for product: " + productId + " done.");
+    }
 }
