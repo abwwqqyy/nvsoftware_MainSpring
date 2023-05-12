@@ -27,7 +27,7 @@ public class AuthController {
         AuthResponse authResponse = AuthResponse.builder()
                 .userId(oidcUser.getEmail())
                 .accessToken(client.getAccessToken().getTokenValue())
-                .refresToken(client.getRefreshToken().getTokenValue())
+                .refreshToken(client.getRefreshToken().getTokenValue())
                 .expireAt(client.getAccessToken().getExpiresAt().getEpochSecond())
                 .authList(oidcUser.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .build();
