@@ -1,0 +1,3 @@
+docker run -d -p 9411:9411 openzipkin/zipkin
+
+docker run --name some-redis -d -p 6379:6379 redis
