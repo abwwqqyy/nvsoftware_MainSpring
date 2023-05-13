@@ -22,17 +22,18 @@ public class ServiceInstanceListSupplierTest implements ServiceInstanceListSuppl
                 "PAYMENT-SERVICE",
                 "PAYMENT-SERIVCE",
                 "localhost",
-                8003,
+                8053,
                 false
-        ));
+        )); // mocked port
 
         serviceInstancesList.add(new DefaultServiceInstance(
                 "PRODUCT-SERVICE",
                 "PRODUCT-SERIVCE",
                 "localhost",
-                8001,
+                8053,
                 false
-        ));
+        )); // mocked port
+
         return Flux.just(serviceInstancesList);
     }
 }
