@@ -9,7 +9,8 @@ docker run --name some-redis -d -p 6379:6379 redis
 
 // -e for environment
 // address for eureka to find services
-docker run -p p1:p2 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8050/eureka --name ${your container name} ${your image name}
+docker run -p p1:p2 -e EUREKA_SERVER_ADDRESS=http://host.docker.internal:8050/eureka -e CONFIG_SERVER_ADDRESS=host.docker.internal --name ${your container name} ${your image name}
+
 
 === commands ===
 
