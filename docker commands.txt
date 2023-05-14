@@ -1,0 +1,38 @@
+=== create new containers ===
+// docker run -p p1:p2 --name ${your container name} ${your image name}
+// -d for detach so that terminal can do sth else
+// p1:p2  p1 for outer, p2 for inner port number
+
+docker run -d -p 9411:9411 openzipkin/zipkin
+
+docker run --name some-redis -d -p 6379:6379 redis  
+
+
+=== commands ===
+
+docker pull ${name} // download image
+docker images -a // all images
+docker ps -a // all containers
+
+docker stop ${container id or name} // stop container
+docker start ${container name} // start created container
+
+// stop container first, then delete containers, then delete images, 
+docker rm ${container id or name}
+docker rmi ${image id or name}
+docker system prune -a // delete all including cache
+
+docker inspect ${image or container name} // related information
+
+docker logs ${container name} // logs for certain container
+
+docker exec -it ${container name} /bin/sh  // go to container shell, use 'exit' to exit
+
+
+=== build ===
+cd to your path
+
+mvn clean install // pack all to .jar files
+docker build -t ${your image name} .  // 
+
+
